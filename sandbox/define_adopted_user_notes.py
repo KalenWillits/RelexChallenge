@@ -42,3 +42,26 @@ dataframe[
 dataframe[(dataframe['day_of_week'] == 1) & (dataframe['user_id'] == 66)]
 
 len(dataframe['day_of_week'].unique())
+
+
+user_df_adopted['adopted_user'].sum()
+
+
+
+
+
+# Not working, changing tactic
+dataframe = user_eng.head(1000)
+
+dataframe['date_time'].year
+
+day = 0
+df['adopted_users'][(df['num_day'] < day+7) & (df['num_day'] > day-7)].sum()
+
+user_adopted.columns
+# This is the way to do it!!
+storage = []
+df = user_adopted.head(1000)
+for id in tqdm(df['user_id']):
+    for day in df['num_day']:
+        sum((df['num_day'] < day+7) & (df['num_day'] > day-7) & (df['user_id'] == id))

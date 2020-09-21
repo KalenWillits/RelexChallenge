@@ -9,6 +9,7 @@
 # - [Data Import](#Data-Import)
 # - [Building Week & Day Columns](Building-Week-&-Day-Columns)
 # - [Defining An Adopted User](Defining-An-Adopted-User)
+# -[Exploring Features Contributing To User Adoption](#Exploring-Features-Contributing-To-User-Adoption)
 
 # %% markdown
 # ### Environment
@@ -36,9 +37,19 @@ user_eng = pd.read_csv(cd_data+'takehome_user_engagement.csv')
 
 # %% codecell
 user_eng['date_time'] = pd.to_datetime(user_eng['time_stamp'])
+user_eng['year'] = user_eng['date_time'].dt.year
+user_eng['month'] = user_eng['date_time'].dt.month
 user_eng['week'] = user_eng['date_time'].dt.week
 user_eng['day_of_week'] = user_eng['date_time'].dt.weekday
 
 # %% markdown
 # ### Defining An Adopted User
+# %% codecell
+user_date_id = define_date_id(user_eng)
+user_logins = user_activity(user_date_id, limit=100)
+user_adopt = define_adopted_users(user_logins)
+
+# %% markdown
+# ### Exploring Features Contributing To User Adoption
+
 # %% codecell
