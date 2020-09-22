@@ -23,8 +23,8 @@ def define_adopted_users(df):
     on three separate days in at least one seven­day period.
     """
 
-    df['adopted_users'] = False
-    df['adopted_users'][df['user_activity'] >= 3] = True
+    df['adopted'] = 0
+    df['adopted'][df['user_activity'] >= 3] = 1
     return df
 
 def user_activity(df, scope=3, limit=None):

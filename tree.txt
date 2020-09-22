@@ -1,0 +1,28 @@
+.
+├── data
+│   ├── database.backup
+│   ├── database.db
+│   ├── database.db.sqbpro
+│   ├── takehome_user_engagement.csv
+│   ├── takehome_users.csv
+│   ├── takehome_users.sql
+│   └── users
+├── documents
+│   └── relax_data_science_challenge.pdf
+├── figures
+│   └── adopted_users_by_feature.png
+├── library.py
+├── notebook.py
+├── __pycache__
+│   └── library.cpython-37.pyc
+├── README.md
+├── sandbox
+│   ├── create_date_id_notes.py
+│   ├── define_adopted_user_notes.py
+│   ├── explore.py
+│   └── import_testing.py
+├── sources
+│   └── 1481069814_relax_challenge.zip
+└── tree.txt
+
+6 directories, 19 files
