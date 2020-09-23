@@ -50,12 +50,13 @@ user_eng['day_of_week'] = user_eng['date_time'].dt.weekday
 # ### Defining An Adopted User
 # %% codecell
 user_date_id = define_date_id(user_eng)
-user_logins = user_activity(user_date_id, limit=20)
+user_logins = user_activity(user_date_id, limit=2500)
 user_adopt = define_adopted_users(user_logins)
 
 # %% codecell
 # __aliasing & merge__
 activity = user_adopt
+# activty = activity['adopted'].apply(int)
 adopted = activity[['user_id', 'adopted']].drop_duplicates()
 users.rename(columns={'object_id':'user_id'}, inplace=True)
 users_merged = users.merge(adopted, on='user_id', how='outer')
@@ -65,6 +66,7 @@ users_merged = users.merge(adopted, on='user_id', how='outer')
 # ### Data Processing
 
 # %% codecell
+# __Checking which features have the most adopted users__
 
 # Grabbing only the columns that I need
 adopted = activity[['user_id', 'adopted']].drop_duplicates()
@@ -82,33 +84,52 @@ df['invited_by_user_id'][df['invited_by_user_id'] > 0] = 1
 df['invited_by_user_id'].fillna(0, inplace=True)
 
 # One Hot encoding
-dum_df = pd.get_dummies(df, columns=['creation_source'])
+dum_df = pd.get_dummies(df, columns=['creation_source'], dtype='int')
 
+# removing uneeded columns
+dum_df = dum_df[['opted_in_to_mailing_list',
+ 'enabled_for_marketing_drip',
+ 'org_id',
+ 'invited_by_user_id',
+ 'adopted',
+ 'creation_source_GUEST_INVITE',
+ 'creation_source_ORG_INVITE',
+ 'creation_source_PERSONAL_PROJECTS',
+ 'creation_source_SIGNUP',
+ 'creation_source_SIGNUP_GOOGLE_AUTH']]
 # Count the adopted users of a feature
 storage = []
 for col in dum_df.columns:
-    storage.append([sum(dum_df[col][dum_df['adopted'] == True])])
+    storage.append(dum_df[(dum_df[col] == True) & (dum_df['adopted'] == True)][col].sum())
 
 column_names = dum_df.columns.to_list()
+
+# Saving data
+dum_df.to_csv(cd_data+'dum_df.csv', index=False)
+
 
 # %% markdown
 # ### Visualization
 
 # %% codecell
 data_dict = dict(zip(column_names, storage))
-data_df_transposed.index
-data_df = pd.DataFrame(data_dict)
+data_df = pd.DataFrame(data_dict, index=[0])
 data_df_transposed = data_df.transpose()
 data_df_transposed.columns = ['adopted']
 fig_title = 'adopted_users_by_feature'
 plt.figure(figsize=(10,7))
 plt.title(fig_title.replace('_', ' ').title())
 plt.barh(data_df_transposed.index, width=data_df_transposed['adopted'], color='black')
-# plt.xticks(rotation=90)
 plt.savefig(cd_figures+fig_title+'.png', transparent=True)
+data_df_transposed.to_csv(cd_data+'data_df_transposed.csv', index=False)
+
 
 # %% markdown
 # ### Observations
-
+# The generated bar chart shows what features bring in the most adopted users.
+# Ignoring the adopted user count feature, the invited users and users that are
+# opted into the mailing list carry the most adoptions. In contrast, the creation source of creation source
+# of personal projects and organizations do not contribute to creating user adoptions.
 # %% markdown
 # ### Insights
+# Users inviting users and users that stay on the mailing list become adopted users. 

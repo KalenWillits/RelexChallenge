@@ -61,3 +61,9 @@ plt.figure(fig_size=10,7)
 pd.DataFrame(zip(column_names, storage)).hist(grid=False, color='black')
 plt.xticks(column_names, rotation=45)
 plt.savefig(cd_figures+fig_title+'.png', transparent=True)
+
+
+pd.DataFrame(zip(column_names.replace('_', ' ')).title(), storage)
+
+
+dum_df[col][dum_df['adopted'] == True].values
